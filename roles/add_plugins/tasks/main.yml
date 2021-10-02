@@ -1,0 +1,9 @@
+---
+- name: add plugins
+  shell: |
+      rabbitmq-plugins enable rabbitmq_management
+- name: restart service
+  systemd:
+    name: rabbitmq-server
+    state: restarted
+

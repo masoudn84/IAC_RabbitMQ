@@ -1,0 +1,30 @@
+---
+- name: copy erlang coockie
+  shell: >
+          sshpass -p {{ rabbitmq_master_pass }} scp -o StrictHostKeyChecking=no \
+          -o NoHostAuthenticationForLocalhost=yes -o UserKnownHostsFile=/dev/null \
+           {{ rabbitmq_master }}:/var/lib/rabbitmq/.erlang.cookie /var/lib/rabbitmq/.erlang.cookie-master
+
+
+- name: replace cookie
+  shell: >
+      echo $(cat /var/lib/rabbitmq/.erlang.cookie-master) >/var/lib/rabbitmq/.erlang.cookie
+
+- name: change owner of cookie
+  file:
+    path: /var/lib/rabbitmq/
+    state: directory
+    recurse: yes
+    owner: rabbitmq
+    group: rabbitmq
+    mode: '400'
+
+- name: change owner of cookie
+  file:
+    path: /var/lib/rabbitmq/.erlang.cookie
+    mode: '400'
+
+- name: join nodes
+  shell: |
+      rabbitmqctl stop_app && rabbitmqctl join_cluster --ram rabbit@192.168.106.90 && rabbitmqctl start_app 
+

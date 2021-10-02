@@ -1,0 +1,8 @@
+---
+- name: get rabbimq
+  yum: 
+      name: https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.16/rabbitmq-server-3.8.16-1.el7.noarch.rpm
+      state: present
+- name: install rabbitmq
+  shell: |
+    rpm -i rabbitmq-server-3.6.1-1.noarch.rpm 

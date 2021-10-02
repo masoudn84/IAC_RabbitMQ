@@ -1,0 +1,16 @@
+---
+- name: edit and adjust permission
+  shell: |
+     rabbitmqctl add_user admin admin
+     rabbitmqctl set_user_tags admin administrator
+     rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+     rabbitmqctl delete_user guest
+  when: ansible_ssh_host  == "192.168.75.34"
+  ignore_errors: yes
+- name: join to cluster
+  shell: |
+    rabbitmqctl stop_app
+    rabbitmqctl reset
+    rabbitmqctl join_cluster --ram rabbit@stgRabbitmq34
+    rabbitmqctl start_app 
+  when: ansible_ssh_host != "192.168.75.34"

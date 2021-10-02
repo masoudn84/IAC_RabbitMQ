@@ -1,0 +1,17 @@
+---
+#edit edit_user ansible_host and cluster_name
+- hosts: rabbitmq
+  gather_facts: false
+  roles:
+    # - epel
+    - install_rabbitmq
+    - service
+    - firewall
+    - add_plugins
+    - edit_user
+# - hosts: rabbitmq_nodes
+#   vars:
+#       - rabbitmq_master: '192.168.106.92'
+#       - rabbitmq_master_pass: 'root'
+#   roles:
+#     - copy_key
